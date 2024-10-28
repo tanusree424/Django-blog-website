@@ -11,78 +11,167 @@
     <title>{% block title %}
     default - title
     {% endblock title %}</title>
-    <style>
-      nav{
-        width:100%;
-        height: 5rem;
-        padding:15px 12px;
-      }
-      .active{
-        background-color:blue;
-        color:red;
-      }
-      .nav-item{
-        margin-right:22px;
-        margin:10px;
-      }
-      h3{
-        margin:10px;
-      }
-      h3 a{
-        margin-left:12px
-      }
-      .nav-item .nav-link{
-        
-        list-style-none;
-      }
-      nav li{
-        list-style: none;
-      }
-      .active{
-        background-color:yellow;
-        color:black;
-        padding:0 12px;
-        font-weight: bold;
-      }
-      li:hover{
-        background-color:yellow;
-        color:black;
-        padding:0 12px;
-        font-weight: bold;
-        transition:ease-in 0.6s;
-      }
-    </style>
+    
   </head>
   <body>
-    <nav class="navbar-nav bg-dark nav-dark">
-      <div class="d-flex">
-      <h1><a href="" class="text-decoration-none text-light">iCoder</a></h1>
-      <ul class="me-auto d-flex">
-      <li class="nav-item {% if request.path == "/" %}active{% endif %}">
-        <a href="{% url "home" %}" class="nav-link text-decoration-none">Home</a>
-      </li>
-      <li class="nav-item {% if request.path == "/about/" %}active{% endif %}">
-        <a href="{% url "about" %}" class="nav-link text-decoration-none">About</a>
-      </li>
-      <li class="nav-item {% if request.path == "/blog/" %}active{% endif %}">
-        <a href="{% url "blogpage" %}" class="nav-link text-decoration-none">Blog</a>
-      </li>
-      <li class="nav-item {% if request.path == "/contact/" %}active{% endif %}">
-        <a href="{% url "contact" %}" class=" nav-link text-decoration-none">Contact</a>
-      </li>
-    </ul>
-    <div>
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  </div>
-  </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">iCoder</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-2 ">
+            <li class="nav-item">
+              <a class="nav-link {% block homeblock %}
+              
+              {% endblock homeblock %}" aria-current="page" href="{% url "home" %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block aboutblock %}
+              
+              {% endblock aboutblock %}" aria-current="page" href="{% url "about" %}">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block blogactive %}
+              
+              {% endblock blogactive %}" aria-current="page" href="{% url "bloghome" %}">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block contactactive %}
+              
+              {% endblock contactactive %}" aria-current="page" href="{% url "contact" %}">Contact</a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link {% block profileactive %}
+              
+              {% endblock profileactive %}" aria-current="page" href="{% url 'profile'  %}">Profile</a>
+            </li>
+            {% endif %}
+          </ul>
+          
+        </div>
+        
+          <form class="d-flex ml-auto form-inline">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+           
+          </form>
+          {% if request.user.is_authenticated %}
+          
+          <div class="dropdown">
+            <button class="btn mx-2 btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Welcome, {{request.user}}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="{% url "handlelogout" %}">Logout</a></li>
+            
+            </ul>
+          </div>
+          {% else %}
+           
+            <button type="button" class="btn btn-outline-primary mx-2" data-bs-toggle="modal" data-bs-target="#signupModal">
+              Signup
+            </button>
+            <button type="button" class="btn mx-2 btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+              Login
+            </button>
+            {% endif %}
+     
+        </div>
+      </div>
+      </div>
+      <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Sign Up</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url "signup" %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"><b>User Name</b></label>
+                  <input type="text" name="username" Required class="form-control" placeholder="please chooes an unique username (lowecase & alphanumeric)" id="exampleInputEmail1" aria-describedby="emailHelp">
+                
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"><b>First Name</b></label>
+                  <input type="text" Required class="form-control" name="firstname" placeholder="First Name" >
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"><b>Last Name</b></label>
+                  <input type="text" Required class="form-control" name="lastname" placeholder="Last Name" >
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"><b>Email Address</b></label>
+                  <input type="email"  Required class="form-control" name="email" placeholder="EMAIL" >
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"><b>Password</b></label>
+                  <input type="password" Required class="form-control" name="password" placeholder="PASSWORD">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"><b>Confrim Password</b></label>
+                  <input type="password" Required class="form-control" name="confirm_password" placeholder="CONFIRM PASSWORD">
+                </div>
+                
+            <div class="modal-footer">
+              <button type="submit" class="btn m-auto btn-primary">Sign Up</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!--Login Modal-->
+       
  
     </nav>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url "login" %}" method="post">{% csrf_token %}
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">User Name</label>
+                <input type="text" required name="username" class="form-control"  aria-describedby="emailHelp">
+               
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" name="password" required class="form-control">
+              </div>
+             
+              
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn m-auto btn-primary">Login</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if messages %}
+    {% for message in messages  %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong> {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+  
       {% block body %}
       
       {% endblock body %}
+      {% block js %}
+      
+      {% endblock js %}
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

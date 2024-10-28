@@ -1,0 +1,126 @@
+{% extends "home/layouts.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Blog |PAGE
+{% endblock title %}
+{% block body %}
+<div class="container my-3">
+    <div class="blog-post">
+            <h2 class="blog-post-title">{{posts.title}}</h2>
+            <p class="blog-post-meta">{{posts.timestamps}} by <a href="">{{posts.author}}</a> <span>({{posts.view}}) views</span> </p>
+    
+            <p>{{posts.content|safe}}</p>
+            <hr>
+          </div>
+          </div>
+<div class="container">
+  <h2>Comments ({{comments.count}})</h2>
+  {% if request.user.is_authenticated %}
+  <form action="{% url "comment" %}" method="post">
+    {% csrf_token %}
+  
+  
+          <input type="hidden" name="postSno" value="{{posts.sno}}">
+      <div class="mb-3">
+        <label for="comment" class="form-label"><b>Comment</b></label>
+        <textarea type="text" placeholder="Enter Your Comment Here..." cols="30" rows="5" class="form-control border-dark rounded-0 border-1 w-50" cols="30" name="comment" id=""></textarea>
+        <input type="hidden" name="parentsno" value="">
+      </div>
+      <div>
+      <button type="submit"  class="btn btn-primary">Comment</button>
+      
+  
+    </div>
+    
+  
+  </form>
+  {% else %}
+  <h2 >Login First To comments on Posts</h2>  
+  {% endif %}
+
+
+  {% for comment in comments  %}
+  <div class="row my-3">
+    <div class="col-md-2">
+      <img class="border rounded-circle  border-2 mx-auto d-block w-50 p-2"   style="object-fit:cover; border-radius:50%%;" src="{{comment.user.userprofile.user_img.url}}"  alt="" srcset="">
+      
+    
+    </div>
+    <div class="col-md-10  "><b>{{comment.user.first_name}} {{comment.user.last_name}}: </b> <span class="badge bg-primary" style="font-size:10px;">{{comment.timestamps | naturaltime}}</span>
+    <div>  {{comment.comment}}
+    </div>
+
+    <div class="mx-0 m-2 reply">
+      
+      <p>
+        {% if request.user.is_authenticated and request.user != comment.user %}
+
+        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="collapseExample">
+         Reply
+        </button>
+        {% endif %}
+        {% if request.user.is_authenticated and request.user == comment.user  %}
+    
+        <a href="{% url "delete_com" comment.sno %}" class="btn btn-sm btn-danger me-2" onclick="return confirm('Are you sure you want to delete this comment?');">Delete</a>
+        <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#editcommentCollapse{{comment.sno}}" aria-expanded="false" aria-controls="#editcommentCollapse">
+          Edit
+        </button>
+        {% else %}
+       
+       {% endif %}
+       <div class="collapse" id="editcommentCollapse{{comment.sno}}">
+        <div class="card card-body">
+          <form action="{% url "edit_reply" %}" method="post">
+            {% csrf_token %}
+          
+          
+                  <input type="hidden" name="postSno" value="{{posts.sno}}">
+              <div class="mb-3">
+                <label for="comment" class="form-label"><b>Edit a Reply</b></label>
+                <input type="hidden" name="parentsno" value="{{comment.sno}}">
+                <input type="text" value="{{comment.comment}}" placeholder="Enter Your Comment Here..." cols="30" rows="5" class="form-control border-dark rounded-0 border-1 w-50" cols="30" name="comment" id=""/>
+               
+              </div>
+              <div>
+              <button type="submit"  class="btn btn-primary">Update a Reply</button>
+            </div>
+          </form>
+        </div>
+    
+      </div>
+       
+      </p>
+      <div class="collapse" id="replyBox{{comment.sno}}">
+        <div class="card card-body">
+          <form action="{% url "comment" %}" method="post">
+            {% csrf_token %}
+          
+          
+                  <input type="hidden" name="postSno" value="{{posts.sno}}">
+              <div class="mb-3">
+                <label for="comment" class="form-label"><b>Post a Reply</b></label>
+                <input type="hidden" name="parentsno" value="{{comment.sno}}">
+                <input type="text" placeholder="Enter Your Comment Here..." cols="30" rows="5" class="form-control border-dark rounded-0 border-1 w-50" cols="30" name="comment" id=""/>
+               
+              </div>
+              <div>
+              <button type="submit"  class="btn btn-primary">Post a Reply</button>
+            </div>
+          </form>
+        </div>
+    
+      </div>
+      <div class="replies my-2 ">
+        {% include "blog/reply.html" with replies=comment.replies.all %}
+      </div>
+    </div>
+  </div>
+  
+ 
+</div>
+{% endfor %}
+</div>
+{% endblock  %}
+    

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #myTextarea {
+        height: 80vh;
+      }
+    </style>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.4.1/tinymce.min.js"
+      integrity="sha512-TDS3vtbiUCZzBBZO8LFud171Hw+ykrQgkrvjwV+i+XsI0LC46PR4affO+9VbgcR79KreoN7J0HKup9mrle4gRA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script type="text/javascript">
+      tinymce.init({
+        selector: "#myTextarea",
+        // width: 600,
+        //  height: 300,
+        plugins: [
+          "advlist",
+          "autolink",
+          "link",
+          "image",
+          "lists",
+          "charmap",
+          "preview",
+          "anchor",
+          "pagebreak",
+          "searchreplace",
+          "wordcount",
+          "visualblocks",
+          "visualchars",
+          "code",
+          "fullscreen",
+          "insertdatetime",
+          "media",
+          "table",
+          "emoticons",
+          "help",
+        ],
+        toolbar:
+          "undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | " +
+          "bullist numlist outdent indent | link image | print preview media fullscreen | " +
+          "forecolor backcolor emoticons | help",
+        menu: {
+          favs: {
+            title: "My Favorites",
+            items: "code visualaid | searchreplace | emoticons",
+          },
+        },
+        menubar: "favs file edit view insert format tools table help",
+        content_css: "css/content.css",
+       
+      });
+      
+    </script>
+  </head>
+
+  <body>
+    <h1>TinyMAC Editor Quick Start Guide</h1>
+    <form action="" method="post">
+      <textarea id="myTextarea"></textarea>
+    </form>
+  <button id="btn">GET HTML</button>
+  <div id="myHTML"></div>
+  <script>
+    btn.addEventListener('click',(e)=>{
+      console.log(e)
+      myHTML.innerText= tinyMCE.get('myTextarea').getContent();
+    })
+  </script>
+  </body>
+</html>

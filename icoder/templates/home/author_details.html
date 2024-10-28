@@ -1,0 +1,43 @@
+{% extends "home/layouts.html" %}  <!-- Replace base.html with your layout template -->
+{% load static %}
+{% block title %}{{ author.username }}'s Profile{% endblock %}
+{% block body %}
+<div class="container my-3">
+    <h1>{{ author.user.first_name}} {{ author.user.last_name}}</h1>
+    {% if not author.userprofile.user_img.url %}
+    <img src="{% static 'user.png' %}" alt="{{ author.user.username }}"  style="width: 150px; height: 150px; object-fit:contain;">
+    {% else %}
+    <img src="{{ author.userprofile.user_img.url }}" alt="{{ author.user.username }}"  style="width: 150px; height: 150px; object-fit:contain;">
+    {% endif %}
+    {% if not author.userprofile.school and author.userprofile.college  %}
+    <h3><strong>Education:</strong></h3>
+    <span> <strong>School:</srtong>Not Known</span> <br>
+     <span> <strong> College:</srtong> Not Known</span>
+    {% else %}
+    <h3><strong>Education:</strong></h3>
+       <span> <strong>School:</srtong> {{ author.userprofile.school }}</span> <br>
+        <span> <strong> College:</srtong> {{ author.userprofile.college }}</span>
+            {% endif %}        
+    <h2>Posts by : <em>{{ author.first_name }} {{author.last_name}}</em></h2>
+    {% if not author.userprofile.address  %}
+    <address>Not Known</address> 
+    {% else %}
+     <address>{{author.userprofile.address}}</address> 
+     {% endif %}
+     <em>{{author.user.email}}</em>
+     {% if not author.userprofile.phone  %}
+     <p>Phone: Not Known</p>
+     {% else %}
+    <p>Phone: {{author.userprofile.phone}}</p>
+    {% endif %}
+    <ul>
+        <h2>All POSTS:</h2>
+         {% for post in posts %}
+         
+            <li class="list-style-none m-3"><a href="{% url 'blogPost' post.slug %}">{{ post.title }}</a></li>
+        {% empty %} 
+             <li>No posts available.</li> 
+         {% endfor %} 
+    </ul>
+</div>
+{% endblock %}

@@ -1,7 +1,21 @@
 {% extends "home/layouts.html" %}
+{% block aboutblock %}
+active
+{% endblock aboutblock %}
 {% block title %}
 ABOUT | PAGE
 {% endblock title %}
 {% block body %}
-about page
+<div class="container">
+    <h1>Our Authors</h1>
+    <ul>
+        {% for author in authors %}
+            <li> <a href="{% url 'author_detail' author.id %}">
+            <img src="{{ author.user_img.url }}" style="object-fit:contain;" alt="{{ author.username }}" width="200" height="200" srcset="">    {{ author.user.first_name }} {{ author.user.last_name }}</a>
+          
+        </li>
+        {% endfor %}
+        
+    </ul>
+</div>
 {% endblock body %}

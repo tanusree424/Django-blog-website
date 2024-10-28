@@ -1,4 +1,56 @@
+{# blog/blog_page.html #}
 {% extends "home/layouts.html" %}
+
 {% block title %}
-BLOG |PAGE
+All Blog Posts
 {% endblock title %}
+
+{% block body %}
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-12">
+  <h2>All Blog Posts</h2>
+  
+  {% for post in posts %}
+  <div class="card p-4 m-3">
+    <h1>{{post.title}}</h1>
+    <small>Written By: <em class="fw-bold text-primary"><a href="{% url "author_detail" post.author.id %}">{{post.author.first_name}} {{post.author.last_name}} </a></em>Views: ({{post.view}})</small>
+    <p>{{post.content|truncatechars_html:320|safe}}</p>
+    <div>
+   <a href="{% url "blogPost" post.slug %}" class="btn btn-primary">Continue Reading</a>
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- Pagination controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if posts.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+      </li>
+      {% endif %}
+
+      <li class="page-item active">
+        <span class="page-link">
+          Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+        </span>
+      </li>
+
+      {% if posts.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ posts.paginator.num_pages }}">Last</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+</div>
+</div>
+{% endblock %}

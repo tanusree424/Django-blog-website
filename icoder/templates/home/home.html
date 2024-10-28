@@ -1,7 +1,63 @@
-{% extends "home/layouts.html" %}
-{% block title %}
-HOME | PAGE
-{% endblock title %}
+{% extends "home/layouts.html" %} 
+{% block title %} 
+HOME | PAGE {% endblock %}
+{% block homeblock %}
+active
+{% endblock homeblock %}
 {% block body %}
-Home page
+<div class="container my-3">
+  <div class="jumbotron text-light bg-secondary p-4">
+    <h1 class="display-4">Welcome to iCoder</h1>
+    <p class="lead">
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur
+      aliquam, dolores numquam sint cum alias necessitatibus earum rerum
+      exercitationem aliquid?
+    </p>
+    <hr class="my-4" />
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis deserunt
+      nemo, nulla omnis architecto rerum?
+    </p>
+    <a href="blog/" class="btn btn-primary" role="button">Go to Blog</a>
+  </div>
+</div>
+<div class="container">
+  <h2>Propular Blog Post</h2>
+  <div class="row mb-2">
+    <div class="col-md-12">
+      {% for post in popular_posts  %}
+      
+      
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row my-4 shadow-sm h-md-250 position-relative"
+      >
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
+          <h3 class="mb-0">About {{post.title}}</h3>
+          <div class="mb-1 text-muted">Nov 12</div>
+          <p class="card-text mb-auto">
+           {{ post.content|safe|truncatechars_html:300 }}
+          </p>
+          <a href="{% url "blogPost" post.slug %}" class="stretched-link">Continue reading</a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <img
+            class="bd-placeholder-img"
+            style="object-fit:contain"
+            width="200"
+            height="250"
+            src="{{post.image.url}}"
+            role="img"
+            aria-label="Placeholder: Thumbnail"
+            preserveAspectRatio="xMidYMid slice"
+            focusable="false"
+          />
+           
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock body %}
+

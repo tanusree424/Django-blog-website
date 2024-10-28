@@ -1,0 +1,65 @@
+{% extends "home/layouts.html" %}
+{% block title %}
+Search | result
+{% endblock title %}
+{% block body %}
+<div class="container mt-3">
+<h2>Search Result</h2>
+{% if posts|length < 1 %}
+<p>No search results</p>
+    Your search query : <b>{{search_data}}</b> did not match any documents. <br>
+    Suggestions:
+    <ul>
+    <li>Make sure that all words are spelled correctly.</li>
+    <li>Try more general keywords.</li>
+   <li> Try fewer keywords.</li>
+   <li> Try different keywords.</li>
+    </li>
+    </ul>
+
+
+{% endif %}
+
+ 
+  {% for post in posts  %}
+  <div class="row mb-2">
+    <div class="col-md-12">
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row my-4 shadow-sm h-md-250 position-relative"
+      >
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">Article by - {{post.author}}</strong>
+          <h3 class="mb-0">{{post.title}}</h3>
+          <div class="mb-1 pl-2 text-muted">{{post.timestamps}}</div>
+          <p class="card-text mb-auto">
+          {{post.content| truncatechars:100}}....
+          </p>
+          <div class="my-2">
+          <a href="{% url 'blogpost' slug=post.slug  %}" role="button" class="btn btn-primary">Continue reading</a>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Initialize the popover with dynamic content
+        $('#popoverButton').popover({
+            title: 'Options',               // Popover title
+            content: `
+              <button class="btn btn-success btn-sm">Checkout</button>
+              <button class="btn btn-secondary btn-sm">Cart</button>
+            `,                              // HTML content with two buttons
+            trigger: 'click',               // Show on click
+            html: true,                     // Enable HTML content in the popover
+            placement: 'bottom'             // Position popover below the button
+          });
+      });
+  </script>
+  {% endblock %}

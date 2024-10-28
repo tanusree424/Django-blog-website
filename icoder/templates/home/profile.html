@@ -1,0 +1,237 @@
+{% extends "home/layouts.html" %}
+{% load static %}
+{% block title %}
+Profile | PAGE
+{% endblock title %}
+{% block profileactive %}
+active
+{% endblock profileactive %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12 m-auto">
+       {% if profile.user_img %}
+        <img class="rounded w-100 my-5" src="{{profile.user_img.url}}" height="120px" width="120px" style="object-fit:contain;" alt="" srcset="">
+       
+        {% else %}
+       <img class="rounded w-100 my-5" src="{% static "user.png" %}" height="120px" width="120px" style="object-fit:contain;" alt="" srcset="">
+        {% endif %}
+       
+        <div class="col-md-4 m-auto">
+        <form action="{% url "profile_add_edit" %}" method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+           
+            <div class="mb-3">
+            <label for="" class="form-label"><b>Image</b></label>
+            <input type="file" name="user_img" class="form-control"  id="">
+        </div>
+       {% if profile.school %}
+       <div class="mb-3">
+        <label for="" class="form-label"><b>School</b></label>
+        <input type="text" readonly name="school" id="" value="{{profile.school}}" class="form-control m-2" placeholder="Enter Your School Name ">
+    </div>
+       {% else %}
+       <div class="mb-3">
+        <label for="" class="form-label"><b>School</b></label>
+        <input type="text" name="school" id=""  class="form-control m-2" placeholder="Enter Your School Name ">
+    </div>
+       {% endif %}
+       
+       
+        {% if profile.college %}
+        <div class="mb-3">
+            <label for="" class="form-label"><b>College</b></label>
+            <input type="text" readonly  id="" value="{{profile.college}}" class="form-control" placeholder="Enter Your College Name ">
+        </div>
+        {% else %}
+        <div class="mb-3">
+            <label for="" class="form-label"><b>College</b></label>
+            <input type="text"   id="" name="college" class="form-control" placeholder="Enter Your College Name ">
+        </div>
+        {% endif %}
+        
+      
+      
+        
+{% if profile.marital_status %}
+<div class="mb-3">
+    <label for="" class="form-label"><b>Marital Status:</b></label>
+    <select class="form-control" readonly aria-label="Default select example">
+        
+        
+        <option readonly {% if profile.marital_status == 'Single' %} selected {% endif %} >Single</option>
+       
+        <option readonly {% if profile.marital_status == 'Married' %} selected {% endif %} >Married</option>
+        
+        <option readonly {% if profile.marital_status == 'Divorced' %} selected {% endif %} >Divorced</option>
+        
+       
+         
+      </select>
+   
+</div>
+{% else %}
+<div class="mb-3">
+    <label for="" class="form-label"><b>Marital Status:</b></label>
+    <select class="form-control" name="Marital_status" aria-label="Default select example">
+        <option selected>marital Status</option>
+        
+        <option value="Single" >Single</option>
+        <option value="Married" >Married</option>
+        <option value="Divorced"  >Divorced</option>
+      </select>
+   
+</div>
+{% endif %}
+        {% if profile.gender %}
+        <div class="mb-3">
+            <label for="" class="form-label"><b>GENDER:</b></label><br>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" readonly class="btn-check"  {% if profile.gender == 'male' %} checked {% endif %} value="male" id="btnradio1" autocomplete="off" >
+                <label class="btn btn-outline-primary" for="btnradio1">Male</label>
+              
+                <input type="radio" readonly class="btn-check"  value="female"  {% if profile.gender == 'female' %} checked {% endif %} id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Female</label>
+              
+                <input type="radio" readonly class="btn-check" value="other"  {% if profile.gender == 'other' %} checked {% endif %} id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Other</label>
+              </div>
+    
+        {% else %}
+        <div class="mb-3">
+            <label for="" class="form-label"><b>GENDER:</b></label><br>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio"  class="btn-check" name="btnradio" value="male"  id="btnradio1" autocomplete="off" >
+                <label class="btn readonly btn-outline-primary" for="btnradio1">Male</label>
+              
+                <input type="radio" class="btn-check" name="btnradio" value="female"  id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Female</label>
+              
+                <input type="radio" class="btn-check" name="btnradio" value="other" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Other</label>
+              </div>
+    
+        {% endif %}
+  
+       
+       
+           
+        {% if profile.phone %}
+      
+        <div class="mb-3">
+            <lable class="form-label"><b>Phone</b></lable>
+            <input type="number" readonly placeholder="PHONE" value="{{profile.phone}}"  id="" class="form-control rounded-0">
+        </div>
+      {% else %}
+      <div class="mb-3">
+        <lable class="form-label"><b>Phone</b></lable>
+        <input type="number" name="phone" placeholder="PHONE"   id="" class="form-control rounded-0">
+    </div>
+    {% endif %}
+    {% if profile.address %}
+        <div class="mb-3">
+            <lable class="form-label"><b>Address</b></lable><br>
+            <textarea readonly  placeholder="PHONE"  class="form-control p-3"  id="" cols="70" rows="5">{{profile.address}}</textarea>
+        </div>
+      {% else %}
+      <div class="mb-3">
+        <lable class="form-label"><b>Address</b></lable><br>
+        <textarea  placeholder="PHONE"  class="form-control p-3" name="address" id="" cols="70" rows="5"></textarea>
+    </div>
+    {% endif %}
+    {% if profile %}
+        <input type="submit" disabled value="ADD/show Details" class="btn btn-primary">  
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edituserModal{{profile.id}}">
+           Edit Details
+          </button>
+          
+        {% else %}
+        <input type="submit" value="ADD" class="btn btn-primary">  
+        {% endif %}
+        </div>
+        </form>
+    </div>
+    </div>
+    <div class="modal fade" id="edituserModal{{profile.id}}" tabindex="-1" aria-labelledby="edituserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url "updateprofile" profile.id %}" method="post" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                   
+                    <div class="mb-3">
+                    <label for="" class="form-label"><b>Image</b></label>
+                    <input type="file" name="user_img" class="form-control"  id="">
+                </div>
+              
+               <div class="mb-3">
+                <label for="" class="form-label"><b>School</b></label>
+                <input type="text" name="school" id="" value="{{profile.school}}"  class="form-control m-2" placeholder="Enter Your School Name ">
+            </div>
+              
+            
+                
+                <div class="mb-3">
+                    <label for="" class="form-label"><b>College</b></label>
+                    <input type="text"   id="" name="college" value="{{profile.college}}" class="form-control" placeholder="Enter Your College Name ">
+                </div>
+              
+                
+              
+              
+                
+       
+        <div class="mb-3">
+            <label for="" class="form-label"><b>Marital Status:</b></label>
+            <select class="form-control" name="Marital_status" aria-label="Default select example">
+                
+                
+                <option readonly {% if profile.marital_status == 'Single' %} selected {% endif %} >Single</option>
+               
+                <option readonly {% if profile.marital_status == 'Married' %} selected {% endif %} >Married</option>
+                
+                <option readonly {% if profile.marital_status == 'Divorced' %} selected {% endif %} >Divorced</option>
+                
+              </select>
+           
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label"><b>GENDER:</b></label><br>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check"  name="btnradio" {% if profile.gender == 'male' %} checked {% endif %} value="male" id="btnradio1" autocomplete="off" >
+                <label class="btn btn-outline-primary" for="btnradio1">Male</label>
+              
+                <input type="radio" class="btn-check"  name="btnradio" value="female"  {% if profile.gender == 'female' %} checked {% endif %} id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Female</label>
+              
+                <input type="radio"  class="btn-check" name="btnradio" value="other"  {% if profile.gender == 'other' %} checked {% endif %} id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Other</label>
+              </div>
+                   
+                
+              <div class="mb-3">
+                <lable class="form-label"><b>Phone</b></lable>
+                <input type="number" name="phone" placeholder="PHONE" value="{{profile.phone}}"   id="" class="form-control rounded-0">
+            </div>
+            
+              <div class="mb-3">
+                <lable class="form-label"><b>Address</b></lable><br>
+                <textarea  placeholder="PHONE"  class="form-control p-3" name="address" value="" id="" cols="70" rows="5">{{profile.address}}</textarea>
+            </div>
+          
+                
+               
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" >Close</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update Profile</button>
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock body %}

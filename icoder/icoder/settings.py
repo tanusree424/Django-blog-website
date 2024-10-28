@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'home',
+    'django.contrib.humanize',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -120,11 +123,48 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIR = [os.path.join('static')]
-MEDIA_URL = "/media/"
-MEDIA_ROOT = [os.path.join(BASE_DIR / 'media')]
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR /'static')]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MESSAGE_TAGS = {
+   messages.ERROR:"danger"
+
+}
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 500,
+    "width": 800,
+    "menubar": "file edit view insert format tools table help",
+    "plugins": (
+        "advlist autolink lists link image charmap print preview anchor "
+        "searchreplace visualblocks code fullscreen insertdatetime media table paste "
+        "code help wordcount"
+    ),
+    "toolbar": (
+        "undo redo | formatselect | bold italic underline strikethrough | "
+        "forecolor backcolor | alignleft aligncenter alignright alignjustify | "
+        "bullist numlist outdent indent | paragraph | link image media | "
+        "code preview | fullscreen"
+    ),
+    "image_advtab": True,  # Enables the 'Advanced' tab for images
+    "automatic_uploads": True,
+    "file_picker_types": "image",
+    "images_upload_url": "/upload/",  # URL for image upload endpoint
+       "style_formats": [
+        {"title": "Paragraph", "format": "p"},
+        {"title": "Heading 1", "format": "h1"},
+        {"title": "Heading 2", "format": "h2"},
+        {"title": "Heading 3", "format": "h3"},
+        {"title": "Heading 4", "format": "h4"},
+        {"title": "Heading 5", "format": "h5"},
+        {"title": "Heading 6", "format": "h6"},
+    ],
+    "font_formats": "Arial=arial,helvetica,sans-serif; Times New Roman=times new roman,times; Verdana=verdana,geneva; Courier New=courier new,courier",
+    "fontsize_formats": "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
